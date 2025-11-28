@@ -8,7 +8,7 @@ export const getWeatherInfo = async (cityName: string) => {
   }
   try {
     const response = await axios.get(
-      `http://localhost:3700/api/get/get-weather?city=${cityName}`
+      ` https://weather-app-backend-1j65.onrender.com/get-weather?city=${cityName}`
     );
 
     return response.data;
