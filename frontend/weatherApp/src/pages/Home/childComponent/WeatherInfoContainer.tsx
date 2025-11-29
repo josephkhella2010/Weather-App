@@ -214,7 +214,12 @@ export default function WeatherInfoContainer() {
       <div className={classes.SecondContainerSection}>
         <div className={classes.SecondContainerLeftContent}>
           <ClockTime />
-          <h1>{city}</h1>
+          <h1>
+            {city
+              ? city.charAt(0).toLocaleUpperCase() +
+                city.slice(1).toLocaleLowerCase()
+              : ""}
+          </h1>
           <div className={classes.SecondContainerLeftContentMiddleContent}>
             <p>{getDate()}</p>
             <p>Update As of {getTime()}</p>

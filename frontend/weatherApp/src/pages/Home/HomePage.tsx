@@ -11,6 +11,8 @@ import {
 import { useEffect } from "react";
 import { getWeatherInfo } from "../../utilities/getWeatherInfo";
 import WeatherDetails from "./childComponent/WeatherDetails";
+import LoadingContainer from "./childComponent/LoadingContainer";
+import { setIsLoading } from "../../store/ReduxSlices/LoadingSlices";
 
 const useStyles = createUseStyles({
   homePageWrapper: {
@@ -26,7 +28,9 @@ const useStyles = createUseStyles({
 export default function HomePage() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { isCityCorrect } = useSelector((state: RootState) => state.CityStore);
+  const { isLoading, isCityCorrect } = useSelector(
+    (state: RootState) => state.CityStore
+  );
 
   const storedCity = localStorage.getItem("city") || null;
   const storedCityCorrect = JSON.parse(
@@ -35,22 +39,27 @@ export default function HomePage() {
 
   const getWeaterData = async (cityName: string) => {
     const data = await getWeatherInfo(cityName);
-
-    if (!data) {
-      dispatch(setCity(null));
-      dispatch(setWeatherInfo(null));
-      dispatch(setIsCityCorrect(false));
-      localStorage.removeItem("city");
-      localStorage.setItem("isCity", JSON.stringify(false));
-      return null;
+    try {
+      dispatch(setIsLoading(true));
+      if (!data) {
+        dispatch(setCity(null));
+        dispatch(setWeatherInfo(null));
+        dispatch(setIsCityCorrect(false));
+        localStorage.removeItem("city");
+        localStorage.setItem("isCity", JSON.stringify(false));
+        return null;
+      }
+      dispatch(setCity(cityName));
+      dispatch(setWeatherInfo(data.weather));
+      dispatch(setIsCityCorrect(true));
+      localStorage.setItem("city", JSON.stringify(cityName));
+      localStorage.setItem("isCity", JSON.stringify(true));
+      return data.weather;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(setIsLoading(false));
     }
-
-    dispatch(setCity(cityName));
-    dispatch(setWeatherInfo(data.weather));
-    dispatch(setIsCityCorrect(true));
-    localStorage.setItem("city", JSON.stringify(cityName));
-    localStorage.setItem("isCity", JSON.stringify(true));
-    return data.weather;
   };
 
   useEffect(() => {
@@ -62,6 +71,7 @@ export default function HomePage() {
 
   return (
     <div className={classes.homePageWrapper}>
+      {isLoading ? <LoadingContainer /> : ""}
       <ToastContainer />
 
       <FirstContainer getWeaterData={getWeaterData} />
