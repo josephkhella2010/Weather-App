@@ -338,6 +338,8 @@ const useStyles = createUseStyles({
     width: "100%",
     display: "flex",
     justifyContent: "center",
+    position: "relative",
+    right: "30px",
   },
 
   container: {
