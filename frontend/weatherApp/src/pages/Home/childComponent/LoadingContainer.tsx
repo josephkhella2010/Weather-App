@@ -67,7 +67,10 @@ export default function LoadingContainer() {
   );
 }
  */
+import { useEffect } from "react";
 import { createUseStyles } from "react-jss";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../store/StoreSlices/store";
 
 const useStyles = createUseStyles({
   LoadingMainContainer: {
@@ -112,7 +115,6 @@ const useStyles = createUseStyles({
     transform: "translate(-50%, -50%)",
   },
 
-  // each tick/bar
   bar: {
     position: "absolute",
     left: "50%",
@@ -137,12 +139,23 @@ const useStyles = createUseStyles({
 });
 
 export default function LoadingSpinner() {
+  const { isLoading } = useSelector((state: RootState) => state.CityStore);
   const classes = useStyles();
 
   const count = 12;
   const bars = Array.from({ length: count });
 
   const duration = 1.2;
+  useEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  });
 
   return (
     <div className={classes.LoadingMainContainer}>

@@ -7,12 +7,12 @@ import {
   setWeatherInfo,
   setIsCityCorrect,
   setCity,
+  setIsLoading,
 } from "../../store/ReduxSlices/CitySlice";
 import { useEffect } from "react";
 import { getWeatherInfo } from "../../utilities/getWeatherInfo";
 import WeatherDetails from "./childComponent/WeatherDetails";
 import LoadingContainer from "./childComponent/LoadingContainer";
-import { setIsLoading } from "../../store/ReduxSlices/LoadingSlices";
 
 const useStyles = createUseStyles({
   homePageWrapper: {
@@ -38,9 +38,11 @@ export default function HomePage() {
   );
 
   const getWeaterData = async (cityName: string) => {
-    const data = await getWeatherInfo(cityName);
+    dispatch(setIsLoading(true));
+
     try {
-      dispatch(setIsLoading(true));
+      const data = await getWeatherInfo(cityName);
+
       if (!data) {
         dispatch(setCity(null));
         dispatch(setWeatherInfo(null));
@@ -49,11 +51,13 @@ export default function HomePage() {
         localStorage.setItem("isCity", JSON.stringify(false));
         return null;
       }
+
       dispatch(setCity(cityName));
       dispatch(setWeatherInfo(data.weather));
       dispatch(setIsCityCorrect(true));
       localStorage.setItem("city", JSON.stringify(cityName));
       localStorage.setItem("isCity", JSON.stringify(true));
+
       return data.weather;
     } catch (error) {
       console.log(error);
@@ -68,6 +72,7 @@ export default function HomePage() {
       getWeaterData(cityName);
     }
   }, []);
+  console.log(isLoading);
 
   return (
     <div className={classes.homePageWrapper}>

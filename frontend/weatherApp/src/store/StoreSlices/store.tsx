@@ -1,10 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import LoadingSlicesReducer from "../ReduxSlices/LoadingSlices";
 import CitySliceReducer from "../ReduxSlices/CitySlice";
 
 const store = configureStore({
   reducer: {
-    loadingStore: LoadingSlicesReducer,
     CityStore: CitySliceReducer,
   },
 });

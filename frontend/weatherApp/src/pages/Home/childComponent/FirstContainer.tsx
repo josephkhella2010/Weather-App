@@ -237,12 +237,14 @@ const useStyles = createUseStyles({
     padding: "10px 20px",
     backgroundColor: "#fff",
     borderRadius: "25px",
+    cursor: "pointer",
   },
   cityInput: {
     width: "90%",
     height: "40px",
     border: "1px solid transparent",
     outline: "none",
+    cursor: "pointer",
     "&::placeholder": { fontStyle: "italic", color: "grey" },
   },
   firstContainerMainContainerHeader: {
@@ -285,11 +287,12 @@ export default function FirstContainer({ getWeaterData }: FirstContainerProps) {
 
   return (
     <div className={classes.firstContainerMainContainer}>
-      <div className={classes.firstContainerMainContainerHeader}>
+      {/*  <div className={classes.firstContainerMainContainerHeader}>
         <h1>
           Weather Forecast <RunnerWordSpan />
         </h1>
-      </div>
+      </div> */}
+      <RunnerWordSpan />
 
       <div className={classes.cityInputContainer}>
         <input
