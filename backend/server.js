@@ -23,7 +23,6 @@ require("dotenv").config();
 
 const app = express();
 
-// Enable CORS and JSON parsing
 app.use(cors());
 app.use(express.json());
 
@@ -33,13 +32,11 @@ app.use("/api/get/get-weather", require("./ApiRouter/getWeather"));
 app.use("/api/get-weather-days", require("./ApiRouter/getWeatherDays"));
 
 // ######## Serve React Frontend ########
-// Adjust the path according to your project structure
-// Here: backend/ -> ../frontend/weather-app/build
 const buildPath = path.join(__dirname, "../frontend/weather-app/build");
 app.use(express.static(buildPath));
 
-// ######## SPA fallback for React routes ########
-app.get("/*", (req, res) => {
+// ######## SPA fallback ########
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(buildPath, "index.html"));
 });
 
