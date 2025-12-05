@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import CitySliceReducer from "../ReduxSlices/CitySlice";
+import WeatherSliceReducer from "../ReduxSlices/WeatherSlice";
 
 const store = configureStore({
   reducer: {
     CityStore: CitySliceReducer,
+    WeatherStore: WeatherSliceReducer,
   },
 });
 

@@ -98,7 +98,7 @@ const useStyles = createUseStyles({
   },
   SecondContainerRightContent: {
     fontFamily: "'Exo 2', sans-serif",
-    width: "30%",
+    width: "40%",
     height: "fit-content",
     padding: "25px",
     borderRadius: "15px",
@@ -131,6 +131,24 @@ const useStyles = createUseStyles({
   SecondContainerRightContentImgContent: {
     display: "flex",
     justifyContent: "center",
+    flexDirection: "column",
+    gap: "20px",
+    alignItems: "center",
+    "& h5": {
+      fontSize: "20px",
+      color: "#ffffff",
+      fontWeight: "bolder",
+    },
+    "& img": {
+      borderRadius: "10px",
+      backgroundColor: "transparent",
+      width: "100%",
+      objectFit: "cover",
+      aspectRadio: "auto 1920 / 1080",
+      height: "auto",
+      /*       mixBlendMode: "multiply",
+       */ border: "none",
+    },
   },
   SecondContainerRightContentSecondContent: {
     display: "flex",
@@ -208,7 +226,45 @@ export default function WeatherInfoContainer() {
 
     return fullTime;
   }
+  console.log(weatherInfo, weatherInfo?.weather[0]?.main);
 
+  const weatherConditions = weatherInfo?.weather[0]?.main;
+
+  function getIcon() {
+    let iconName = "";
+
+    switch (weatherConditions) {
+      case "Clear":
+        iconName = "Foto/clear.png";
+        break;
+
+      case "Rain":
+        iconName = "Foto/rain.jpg";
+        break;
+
+      case "Clouds":
+        iconName = "Foto/cloudy.png";
+        break;
+
+      case "Snow":
+        iconName = "Foto/snow.jpg";
+        break;
+
+      case "Mist":
+      case "Fog":
+      case "Haze":
+      case "Smoke":
+        iconName = "Foto/mist.jpg";
+        break;
+
+      default:
+        iconName = "Foto/clear.png";
+        break;
+    }
+
+    return iconName;
+  }
+  console.log(getIcon());
   return (
     <div className={classes.SecondContainerMainContainer}>
       <div className={classes.SecondContainerSection}>
@@ -246,7 +302,8 @@ export default function WeatherInfoContainer() {
             <p>Today</p>
           </div>
           <div className={classes.SecondContainerRightContentImgContent}>
-            <img src="/Foto/cloudy.png" alt="not found" />
+            <img src={getIcon()} alt="not found" />
+            <h5>{weatherInfo?.weather[0]?.main}</h5>
           </div>
           <div className={classes.SecondContainerRightContentSecondContent}>
             <p>Temp:{tempC} °C</p>

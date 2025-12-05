@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 4000;
 //###### API
 app.use("/api/post/get-weather", require("./ApiRouter/PostWeather"));
 app.use("/api/get/get-weather", require("./ApiRouter/getWeather"));
+app.use("/api/get-weather-days", require("./ApiRouter/getWeatherDays"));
 //############
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

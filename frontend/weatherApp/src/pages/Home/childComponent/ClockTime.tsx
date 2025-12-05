@@ -24,7 +24,24 @@ export default function ClockTime() {
   }, []);
   return (
     <div>
-      <h1> TIME NOW Is {time}</h1>
+      <h1
+        style={{
+          color: "#ffffff",
+          textAlign: "center",
+          padding: "30px",
+          display: "flex",
+          alignItems: "center",
+          borderRadius: "20px",
+          marginBottom: "20px",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          backgroundColor: "rgba(255, 255, 255, 0.03)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+        }}
+      >
+        {" "}
+        TIME NOW is {time}
+      </h1>
     </div>
   );
 }
