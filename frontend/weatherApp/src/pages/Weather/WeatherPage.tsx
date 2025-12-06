@@ -18,13 +18,14 @@ import LoadingContainer from "../Home/childComponent/LoadingContainer";
 const useStyles = createUseStyles({
   homePageWrapper: {
     width: "100%",
-    backgroundImage: `url("/Foto/homeBackground.jpg")`,
+    backgroundImage: `url("/Foto/weatherTwo.jpg")`,
     backgroundAttachment: "fixed",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     minHeight: "100dvh",
     fontFamily: "'Exo 2', sans-serif",
+    padding: "50px 0px 0px 0px",
   },
   mainContainer: {
     backgroundColor: "blue",
@@ -70,10 +71,10 @@ export default function WeatherPage() {
         return date;
     }
   }
-
+  /*  
   // Handle search button
   async function handleBtn() {
-    /*  if (!inputVal) return;
+    if (!inputVal) return;
     try {
       const weatherFunc = await getWeatherInfoDays(inputVal);
       const convertedDate = weatherFunc?.forecast.map((item: any) => ({
@@ -89,21 +90,11 @@ export default function WeatherPage() {
       setInputVal("");
     } catch (error) {
       console.log("error", error);
-    } */
+    } 
   }
 
   // Handle checkbox change
-  /*   function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
-    const { checked, value } = e.target;
-    let newVal: string[] = [...checkVal];
-    if (checked) {
-      newVal.push(value);
-    } else {
-      newVal = newVal.filter((i) => i !== value);
-    }
-    setCheckVal(newVal);
-    dispatch(filterWeatherInfo(newVal));
-  } */
+  
   /* 
   async function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
     const { checked, value } = e.target;
@@ -206,6 +197,36 @@ export default function WeatherPage() {
 
     return grouped;
   }
+  /*  convert to day */
+  function convertToDay(dateString: string) {
+    const date = new Date(dateString);
+
+    // Get weekday name for all other dates
+    const DateName = date.toLocaleDateString("en-US", { weekday: "long" });
+
+    // ISO dates used for matching
+    const today = getIsoDate(0); // "YYYY-MM-DD"
+    const tomorrow = getIsoDate(1); // "YYYY-MM-DD"
+
+    let name = "";
+
+    // IMPORTANT: switch on the dateString, not the weekday name
+    switch (dateString) {
+      case today:
+        name = "Today";
+        break;
+
+      case tomorrow:
+        name = "Tomorrow";
+        break;
+
+      default:
+        name = DateName;
+        break;
+    }
+
+    return name;
+  }
 
   /* //////////////////////////////////////////////// */
 
@@ -216,7 +237,6 @@ export default function WeatherPage() {
       <FirstContainer
         inputVal={inputVal}
         setInputVal={setInputVal}
-        handleBtn={handleBtn}
         setCheckVal={setCheckVal}
         setWriteInput={setWriteInput}
       />
@@ -230,69 +250,8 @@ export default function WeatherPage() {
         weatherInfo={weatherInfo}
         groupWeatherByDateSimple={groupWeatherByDateSimple}
         getHeaderName={getHeaderName}
+        convertToDay={convertToDay}
       />
     </div>
   );
-}
-
-{
-  /*
-  return (
-    <div className={classes.homePageWrapper}>
-      <ToastContainer />
-      <FirstContainer inputVal={inputVal} setInputVal={setInputVal} />
-      <button onClick={handleBtn}>Search</button>
-      <h1>{writeInput}</h1>
-
-      <CheckboxContainer
-        checkVal={checkVal}
-        handleCheckbox={handleCheckbox}
-        getIsoDate={getIsoDate}
-      />
-
-      <div className={classes.mainContainer}>
-         {Object.keys(groupedByDate).length > 0 ? (
-          Object.keys(groupedByDate).map((date) => (
-            <div key={date}>
-              <h1>{getHeaderName(date)}</h1>
-              {groupedByDate[date].map((item: any, index: number) => {
-                const temp = Math.ceil(Number(item.main?.temp.toFixed(1)));
-                const tempMax = Math.ceil(
-                  Number(item.main.temp_max.toFixed(1))
-                );
-                const tempMin = Math.ceil(
-                  Number(item.main?.temp_min.toFixed(1))
-                );
-                const windSpeed = item.wind.speed.toFixed(1);
-
-                return (
-                  <div
-                    key={index}
-                    style={{
-                      marginBottom: "10px",
-                      border: "1px solid white",
-                      padding: "10px",
-                    }}
-                  >
-                    <p>Date: {item.dt_txt}</p>
-                    <p>Temperature: {temp}°C</p>
-                    <p>Weather: {item.weather?.[0]?.description}</p>
-                    <p>Status: {item.weather?.[0]?.main}</p>
-                    <p>Temperature-max: {tempMax}°C</p>
-                    <p>Temperature-min: {tempMin}°C</p>
-                    <p>Wind Speed: {windSpeed} %</p>
-                  </div>
-                );
-              })}
-            </div>
-          ))
-        ) : (
-          <p>Please select a day to see the forecast.</p>
-        )} 
-        
-      </div>
-    </div>
-  );
-}
-  */
 }

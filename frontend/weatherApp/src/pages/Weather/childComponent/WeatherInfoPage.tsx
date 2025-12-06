@@ -13,8 +13,8 @@ const useStyles = createUseStyles({
   },
   dateHeader: {
     color: "#ffffff",
-    marginBottom: "30px",
     width: "90%",
+    fontSize: "24PX",
   },
   SecondContainerMainContainer: {
     display: "flex",
@@ -25,20 +25,7 @@ const useStyles = createUseStyles({
     "@media (max-width: 768px)": {},
   },
   SecondContainerSection: {
-    /*  display: "flex",
-    justifyContent: "space-between",
-    gap: "50px",
-    alignItems: "center",
-    width: "90%",
-   padding: "20px",
-    borderRadius: "20px",
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-    marginBottom: "50px",
-    "@media (max-width: 768px)": {
-      flexDirection: "column",
-    }, */
+    marginTop: "30px",
     display: "grid",
     justifyContent: "space-between",
     gridTemplateColumns: "7fr 5fr",
@@ -51,7 +38,7 @@ const useStyles = createUseStyles({
     border: "1px solid rgba(255, 255, 255, 0.3)",
     marginBottom: "50px",
     "@media (max-width: 768px)": {
-      flexDirection: "column",
+      gridTemplateColumns: "repeat(1,1fr)",
     },
   },
   SecondContainerLeftMainContent: {
@@ -67,6 +54,9 @@ const useStyles = createUseStyles({
     display: "flex",
     flexDirection: "column",
     gap: "30px",
+    "@media (max-width: 768px)": {
+      order: "2",
+    },
     "& h2": {
       textAlign: "center",
       fontSize: "30px",
@@ -145,7 +135,6 @@ const useStyles = createUseStyles({
     /*         width: "40%",
      */
     width: "100%",
-
     height: "fit-content",
     padding: "25px",
     borderRadius: "15px",
@@ -163,6 +152,7 @@ const useStyles = createUseStyles({
     },
     "@media (max-width: 768px)": {
       width: "100%",
+      order: "1",
     },
   },
   SecondContainerRightContentUpperContent: {
@@ -210,17 +200,30 @@ const useStyles = createUseStyles({
     color: "#ffffff",
     gap: "30px",
   },
+  selectPara: {
+    fontFamily: "'Exo 2', sans-serif",
+    color: "#ffffff",
+    fontWeight: "700",
+  },
+  dateHeaderPara: {
+    color: "#ffffff",
+    textAlign: "left",
+    width: "90%",
+    marginTop: "20px",
+  },
 });
 
 interface WeatherInfoPageProps {
   weatherInfo: any;
   groupWeatherByDateSimple: (weatherInfo: any) => void;
   getHeaderName: (date: string) => string;
+  convertToDay: (dateString: string) => string;
 }
 export default function WeatherInfoPage({
   weatherInfo,
   groupWeatherByDateSimple,
   getHeaderName,
+  convertToDay,
 }: WeatherInfoPageProps) {
   const classes = useStyles();
   const gropArray: any = groupWeatherByDateSimple(weatherInfo);
@@ -270,91 +273,102 @@ export default function WeatherInfoPage({
       <div className={classes.SecondContainerWrapper}>
         <ClockTime />
         {weatherInfo && weatherInfo.length > 0 ? (
-          gropArray.map((group: any) => (
-            <div
-              key={group.weatherDate}
-              className={classes.SecondContainerMainContainer}
-            >
-              {/* Day Header */}
-              <h3 className={classes.dateHeader}>
-                {getHeaderName(group.weatherDate)}
-              </h3>
+          gropArray.map((group: any) => {
+            const dayName = convertToDay(group.weatherDate);
 
-              {/* All 3-hour forecast slots for this day */}
-              {group.weatherData.map((item: any, index: number) => {
-                const temp = Math.ceil(Number(item.main?.temp.toFixed(1)));
-                const tempMax = Math.ceil(
-                  Number(item.main.temp_max.toFixed(1))
-                );
-                const tempMin = Math.ceil(
-                  Number(item.main?.temp_min.toFixed(1))
-                );
-                const windSpeed = item.wind.speed.toFixed(1);
+            return (
+              <div
+                key={group.weatherDate}
+                className={classes.SecondContainerMainContainer}
+              >
+                {/* Day Header */}
+                <h3 className={classes.dateHeader}>
+                  {convertToDay(group.weatherDate)}
+                </h3>
 
-                return (
-                  <div
-                    key={`${group.weatherDate}-${index}`}
-                    className={classes.SecondContainerSection} // could be styled as glass card
-                  >
-                    {/* Left Content */}
-                    <div className={classes.SecondContainerLeftMainContent}>
-                      <h2>{formattedName}</h2>
+                {dayName === "Today" || dayName === "Tomorrow" ? (
+                  ""
+                ) : (
+                  <p className={classes.dateHeaderPara}>{group.weatherDate}</p>
+                )}
+                {/* array for group*/}
+                {group.weatherData.map((item: any, index: number) => {
+                  const temp = Math.ceil(Number(item.main?.temp.toFixed(1)));
+                  const tempMax = Math.ceil(
+                    Number(item.main.temp_max.toFixed(1))
+                  );
+                  const tempMin = Math.ceil(
+                    Number(item.main?.temp_min.toFixed(1))
+                  );
+                  const windSpeed = item.wind.speed.toFixed(1);
 
-                      <div className={classes.SecondContainerLeftContent}>
-                        <p>Date/Time: {item.dt_txt}</p>
-                        <p>Temperature: {temp}°C</p>
-                        <p>Weather: {item.weather?.[0]?.description}</p>
-                        <p>Status: {item.weather?.[0]?.main}</p>
-                        <p>Temp-Max: {tempMax}°C</p>
-                        <p>Temp-Min: {tempMin}°C</p>
-                        <p>Wind Speed: {windSpeed} km/h</p>
-                        {item.rain?.["1h"] && <p>Rain: {item.rain["1h"]}%</p>}
+                  return (
+                    <div
+                      key={`${group.weatherDate}-${index}`}
+                      className={classes.SecondContainerSection} // could be styled as glass card
+                    >
+                      {/* Left Content */}
+                      <div className={classes.SecondContainerLeftMainContent}>
+                        <h2>{formattedName}</h2>
+
+                        <div className={classes.SecondContainerLeftContent}>
+                          <p>Date/Time: {item.dt_txt}</p>
+                          <p>Temperature: {temp}°C</p>
+                          <p>Weather: {item.weather?.[0]?.description}</p>
+                          <p>Status: {item.weather?.[0]?.main}</p>
+                          <p>Temp-Max: {tempMax}°C</p>
+                          <p>Temp-Min: {tempMin}°C</p>
+                          <p>Wind Speed: {windSpeed} km/h</p>
+                          {item.rain?.["1h"] && <p>Rain: {item.rain["1h"]}%</p>}
+                        </div>
+                      </div>
+
+                      {/* Right Content */}
+                      <div className={classes.SecondContainerRightContent}>
+                        <div
+                          className={
+                            classes.SecondContainerRightContentUpperContent
+                          }
+                        >
+                          <p> {convertToDay(group.weatherDate)}</p>
+                        </div>
+                        <div
+                          className={
+                            classes.SecondContainerRightContentImgContent
+                          }
+                        >
+                          <img
+                            src={getIcon(item?.weather[0]?.main)}
+                            alt="not found"
+                          />
+                          <h5>{item.weather?.[0]?.main}</h5>
+                        </div>
+                        <div
+                          className={
+                            classes.SecondContainerRightContentSecondContent
+                          }
+                        >
+                          <p>Temp: {temp} °C</p>
+                        </div>
+                        <div
+                          className={
+                            classes.SecondContainerRightContentThirdContent
+                          }
+                        >
+                          <p>Min: {tempMin} °C</p>
+                          <p>Max: {tempMax} °C</p>
+                        </div>
                       </div>
                     </div>
-
-                    {/* Right Content */}
-                    <div className={classes.SecondContainerRightContent}>
-                      <div
-                        className={
-                          classes.SecondContainerRightContentUpperContent
-                        }
-                      >
-                        <p> {getHeaderName(group.weatherDate)}</p>
-                      </div>
-                      <div
-                        className={
-                          classes.SecondContainerRightContentImgContent
-                        }
-                      >
-                        <img
-                          src={getIcon(item?.weather[0]?.main)}
-                          alt="not found"
-                        />
-                        <h5>{item.weather?.[0]?.main}</h5>
-                      </div>
-                      <div
-                        className={
-                          classes.SecondContainerRightContentSecondContent
-                        }
-                      >
-                        <p>Temp: {temp} °C</p>
-                      </div>
-                      <div
-                        className={
-                          classes.SecondContainerRightContentThirdContent
-                        }
-                      >
-                        <p>Min: {tempMin} °C</p>
-                        <p>Max: {tempMax} °C</p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ))
+                  );
+                })}
+              </div>
+            );
+          })
         ) : (
-          <p>Please select a day to see the forecast.</p>
+          <p className={classes.selectPara}>
+            Please select a day to see the forecast.
+          </p>
         )}
       </div>
     </>

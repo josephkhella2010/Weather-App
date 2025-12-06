@@ -35,13 +35,11 @@ const useStyles = createUseStyles({
 interface FirstContainerProps {
   inputVal: string;
   setInputVal: (inputVal: string) => void;
-  handleBtn: () => void;
   setCheckVal: React.Dispatch<React.SetStateAction<string[]>>;
   setWriteInput: (inputVal: string) => void;
 }
 
 export default function FirstContainer({
-  handleBtn,
   inputVal,
   setInputVal,
   setWriteInput,
@@ -63,7 +61,7 @@ export default function FirstContainer({
       <h1>Weather App</h1>
       <div className={classes.inputSection}>
         <input type="text" value={inputVal} onChange={handlechange} />
-        <CiSearch onClick={handleBtn} />
+        <CiSearch />
       </div>
     </div>
   );
