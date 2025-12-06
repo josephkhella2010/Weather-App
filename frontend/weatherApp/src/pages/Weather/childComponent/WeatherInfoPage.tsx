@@ -216,13 +216,11 @@ const useStyles = createUseStyles({
 interface WeatherInfoPageProps {
   weatherInfo: any;
   groupWeatherByDateSimple: (weatherInfo: any) => void;
-  getHeaderName: (date: string) => string;
   convertToDay: (dateString: string) => string;
 }
 export default function WeatherInfoPage({
   weatherInfo,
   groupWeatherByDateSimple,
-  getHeaderName,
   convertToDay,
 }: WeatherInfoPageProps) {
   const classes = useStyles();

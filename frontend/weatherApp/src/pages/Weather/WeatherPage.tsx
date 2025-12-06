@@ -54,7 +54,8 @@ export default function WeatherPage() {
     return d.toISOString().split("T")[0];
   }
 
-  // Convert date string to header name
+  /*  
+    // Convert date string to header name
   function getHeaderName(date: string) {
     switch (date) {
       case getIsoDate(0):
@@ -71,7 +72,6 @@ export default function WeatherPage() {
         return date;
     }
   }
-  /*  
   // Handle search button
   async function handleBtn() {
     if (!inputVal) return;
@@ -249,7 +249,6 @@ export default function WeatherPage() {
       <WeatherInfoPage
         weatherInfo={weatherInfo}
         groupWeatherByDateSimple={groupWeatherByDateSimple}
-        getHeaderName={getHeaderName}
         convertToDay={convertToDay}
       />
     </div>
