@@ -36,24 +36,33 @@ interface FirstContainerProps {
   inputVal: string;
   setInputVal: (inputVal: string) => void;
   handleBtn: () => void;
+  setCheckVal: React.Dispatch<React.SetStateAction<string[]>>;
+  setWriteInput: (inputVal: string) => void;
 }
 
 export default function FirstContainer({
   handleBtn,
   inputVal,
   setInputVal,
+  setWriteInput,
 }: FirstContainerProps) {
   const classes = useStyles();
+  function handlechange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
+    setInputVal(value);
+    setWriteInput(value);
+    if (value === "") {
+      sessionStorage.removeItem("city");
+    } else {
+      sessionStorage.setItem("city", JSON.stringify(value));
+    }
+  }
 
   return (
     <div className={classes.inputContainer}>
       <h1>Weather App</h1>
       <div className={classes.inputSection}>
-        <input
-          type="text"
-          value={inputVal}
-          onChange={(e) => setInputVal(e.target.value)}
-        />
+        <input type="text" value={inputVal} onChange={handlechange} />
         <CiSearch onClick={handleBtn} />
       </div>
     </div>

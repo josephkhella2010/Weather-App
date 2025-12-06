@@ -1,17 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
 import { useDispatch, useSelector } from "react-redux";
 import {
   filterWeatherInfo,
   setCity,
   setFullForecast,
+  setIsLoading,
 } from "../../store/ReduxSlices/WeatherSlice";
 import CheckboxContainer from "./childComponent/CheckboxContainer";
 import FirstContainer from "./childComponent/FirstContainer";
 import { getWeatherInfoDays } from "../../utilities/getWeatherInfoDays";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import type { RootState } from "../../store/StoreSlices/store";
 import WeatherInfoPage from "./childComponent/WeatherInfoPage";
+import LoadingContainer from "../Home/childComponent/LoadingContainer";
 
 const useStyles = createUseStyles({
   homePageWrapper: {
@@ -32,7 +34,9 @@ const useStyles = createUseStyles({
 
 export default function WeatherPage() {
   const classes = useStyles();
-  const { weatherInfo } = useSelector((state: RootState) => state.WeatherStore);
+  const { weatherInfo, isLoading } = useSelector(
+    (state: RootState) => state.WeatherStore
+  );
   const storagedName = sessionStorage.getItem("city")
     ? JSON.parse(sessionStorage.getItem("city")!)
     : "";
@@ -69,7 +73,7 @@ export default function WeatherPage() {
 
   // Handle search button
   async function handleBtn() {
-    if (!inputVal) return;
+    /*  if (!inputVal) return;
     try {
       const weatherFunc = await getWeatherInfoDays(inputVal);
       const convertedDate = weatherFunc?.forecast.map((item: any) => ({
@@ -85,11 +89,11 @@ export default function WeatherPage() {
       setInputVal("");
     } catch (error) {
       console.log("error", error);
-    }
+    } */
   }
 
   // Handle checkbox change
-  function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
+  /*   function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
     const { checked, value } = e.target;
     let newVal: string[] = [...checkVal];
     if (checked) {
@@ -99,7 +103,92 @@ export default function WeatherPage() {
     }
     setCheckVal(newVal);
     dispatch(filterWeatherInfo(newVal));
+  } */
+  /* 
+  async function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
+    const { checked, value } = e.target;
+    let newVal: string[] = [...checkVal];
+
+    if (checked) {
+      newVal.push(value);
+
+      if (!inputVal) {
+        toast.error("Please enter a city first!");
+
+        return;
+      }
+      dispatch(setIsLoading(true));
+      try {
+        const weatherFunc = await getWeatherInfoDays(inputVal);
+        if (!weatherFunc || !weatherFunc.forecast) {
+          return null;
+        }
+        const convertedDate = weatherFunc?.forecast.map((item: any) => ({
+          ...item,
+          dt_txt: item.dt_txt.split(" ")[0],
+        }));
+
+        dispatch(setFullForecast(convertedDate));
+        dispatch(setCity(inputVal));
+        setWriteInput(inputVal);
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        dispatch(setIsLoading(false));
+      }
+    } else {
+      newVal = newVal.filter((i) => i !== value);
+    }
+
+    setCheckVal(newVal);
+    dispatch(filterWeatherInfo(newVal));
+  } */
+
+  async function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
+    const { checked, value } = e.target;
+    const newVal = checked
+      ? [...checkVal, value]
+      : checkVal.filter((v) => v !== value);
+
+    setCheckVal(newVal);
+    handleWeather(newVal);
   }
+  async function handleWeather(newVal: any) {
+    if (!inputVal) {
+      toast.error("Please enter a city first!");
+      return;
+    }
+
+    dispatch(setIsLoading(true));
+    try {
+      const weatherFunc = await getWeatherInfoDays(inputVal);
+
+      if (!weatherFunc || !weatherFunc.forecast) {
+        return;
+      }
+
+      const convertedDate = weatherFunc.forecast.map((item: any) => ({
+        ...item,
+        dt_txt: item.dt_txt.split(" ")[0],
+      }));
+
+      dispatch(setFullForecast(convertedDate));
+      dispatch(setCity(inputVal));
+    } catch (error) {
+      toast.error("Failed to fetch weather data");
+      console.log("error", error);
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+    dispatch(filterWeatherInfo(newVal));
+  }
+
+  useEffect(() => {
+    if (inputVal === "") {
+      setCheckVal([]);
+      dispatch(filterWeatherInfo([]));
+    }
+  }, [inputVal, dispatch]);
 
   /*  */
   function groupWeatherByDateSimple(weatherInfo: any[]) {
@@ -107,7 +196,6 @@ export default function WeatherPage() {
 
     weatherInfo.forEach((item) => {
       const date = item.dt_txt.split(" ")[0];
-      // Check if we already have this date in grouped
       let existing = grouped.find((g) => g.weatherDate === date);
       if (existing) {
         existing.weatherData.push(item);
@@ -123,11 +211,14 @@ export default function WeatherPage() {
 
   return (
     <div className={classes.homePageWrapper}>
+      {isLoading ? <LoadingContainer /> : ""}
       <ToastContainer />
       <FirstContainer
         inputVal={inputVal}
         setInputVal={setInputVal}
         handleBtn={handleBtn}
+        setCheckVal={setCheckVal}
+        setWriteInput={setWriteInput}
       />
 
       <CheckboxContainer

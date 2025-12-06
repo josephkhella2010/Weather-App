@@ -19,6 +19,7 @@ export const getWeatherInfoDays = async (cityName: string) => {
 
     if (error.response) {
       toast.error(error.response.data?.error?.message || "City not found");
+      return;
     } else {
       toast.error("Server error");
     }

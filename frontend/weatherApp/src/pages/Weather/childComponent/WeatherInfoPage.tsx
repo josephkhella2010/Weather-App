@@ -25,13 +25,26 @@ const useStyles = createUseStyles({
     "@media (max-width: 768px)": {},
   },
   SecondContainerSection: {
-    display: "flex",
+    /*  display: "flex",
     justifyContent: "space-between",
     gap: "50px",
     alignItems: "center",
     width: "90%",
-    /*     backgroundColor: "rgba(255, 255, 255, 0.3)",
-     */ padding: "20px",
+   padding: "20px",
+    borderRadius: "20px",
+    backdropFilter: "blur(10px)",
+    WebkitBackdropFilter: "blur(10px)",
+    border: "1px solid rgba(255, 255, 255, 0.3)",
+    marginBottom: "50px",
+    "@media (max-width: 768px)": {
+      flexDirection: "column",
+    }, */
+    display: "grid",
+    justifyContent: "space-between",
+    gridTemplateColumns: "7fr 5fr",
+    gap: "50px",
+    width: "100%",
+    padding: "20px",
     borderRadius: "20px",
     backdropFilter: "blur(10px)",
     WebkitBackdropFilter: "blur(10px)",
@@ -41,14 +54,8 @@ const useStyles = createUseStyles({
       flexDirection: "column",
     },
   },
-  SecondContainerLeftContent: {
-    width: "70%",
-    /*  display: "flex",
-    flexDirection: "column",
-    gap: "50px", */
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: "30px",
+  SecondContainerLeftMainContent: {
+    width: "100%",
     padding: " 50px 30px",
     borderRadius: "16px",
     WebkitBackdropFilter: "blur(10px)",
@@ -57,10 +64,25 @@ const useStyles = createUseStyles({
     color: "#ffffff",
     backdropFilter: "blur(10px)",
     backgroundColor: "#00000094",
-    "& h1": {
+    display: "flex",
+    flexDirection: "column",
+    gap: "30px",
+    "& h2": {
+      textAlign: "center",
+      fontSize: "30px",
+    },
+  },
+  SecondContainerLeftContent: {
+    width: "100%",
+    display: "grid",
+    gridTemplateColumns: "repeat(1, 1fr)",
+    rowGap: "30px",
+    columnGap: "50px",
+    "& p": {
       color: "#ffffff",
       fontFamily: "'Exo 2', sans-serif",
       fontWeight: "700x",
+      fontSize: "20px",
     },
     "@media (max-width: 768px)": {
       width: "100%",
@@ -120,7 +142,10 @@ const useStyles = createUseStyles({
   },
   SecondContainerRightContent: {
     fontFamily: "'Exo 2', sans-serif",
-    width: "40%",
+    /*         width: "40%",
+     */
+    width: "100%",
+
     height: "fit-content",
     padding: "25px",
     borderRadius: "15px",
@@ -265,7 +290,6 @@ export default function WeatherInfoPage({
                   Number(item.main?.temp_min.toFixed(1))
                 );
                 const windSpeed = item.wind.speed.toFixed(1);
-                console.log(item?.weather[0]?.main);
 
                 return (
                   <div
@@ -273,15 +297,19 @@ export default function WeatherInfoPage({
                     className={classes.SecondContainerSection} // could be styled as glass card
                   >
                     {/* Left Content */}
-                    <div className={classes.SecondContainerLeftContent}>
-                      <p>Date/Time: {item.dt_txt}</p>
-                      <p>Temperature: {temp}°C</p>
-                      <p>Weather: {item.weather?.[0]?.description}</p>
-                      <p>Status: {item.weather?.[0]?.main}</p>
-                      <p>Temp-Max: {tempMax}°C</p>
-                      <p>Temp-Min: {tempMin}°C</p>
-                      <p>Wind Speed: {windSpeed} km/h</p>
-                      {item.rain?.["1h"] && <p>Rain: {item.rain["1h"]}%</p>}
+                    <div className={classes.SecondContainerLeftMainContent}>
+                      <h2>{formattedName}</h2>
+
+                      <div className={classes.SecondContainerLeftContent}>
+                        <p>Date/Time: {item.dt_txt}</p>
+                        <p>Temperature: {temp}°C</p>
+                        <p>Weather: {item.weather?.[0]?.description}</p>
+                        <p>Status: {item.weather?.[0]?.main}</p>
+                        <p>Temp-Max: {tempMax}°C</p>
+                        <p>Temp-Min: {tempMin}°C</p>
+                        <p>Wind Speed: {windSpeed} km/h</p>
+                        {item.rain?.["1h"] && <p>Rain: {item.rain["1h"]}%</p>}
+                      </div>
                     </div>
 
                     {/* Right Content */}
@@ -291,7 +319,7 @@ export default function WeatherInfoPage({
                           classes.SecondContainerRightContentUpperContent
                         }
                       >
-                        <p>Summary</p>
+                        <p> {getHeaderName(group.weatherDate)}</p>
                       </div>
                       <div
                         className={
@@ -302,7 +330,6 @@ export default function WeatherInfoPage({
                           src={getIcon(item?.weather[0]?.main)}
                           alt="not found"
                         />
-                        <h5>{formattedName}</h5>
                         <h5>{item.weather?.[0]?.main}</h5>
                       </div>
                       <div

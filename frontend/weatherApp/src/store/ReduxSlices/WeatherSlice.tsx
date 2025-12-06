@@ -51,7 +51,6 @@ const WeatherSlice = createSlice({
     filterWeatherInfo: (state, action: PayloadAction<string[]>) => {
       const selectedDates = action.payload;
 
-      // Only show selected dates, empty array if none selected
       state.weatherInfo =
         selectedDates.length === 0
           ? []
