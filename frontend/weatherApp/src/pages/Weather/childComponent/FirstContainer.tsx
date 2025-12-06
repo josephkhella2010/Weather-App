@@ -60,7 +60,12 @@ export default function FirstContainer({
     <div className={classes.inputContainer}>
       <h1>Weather App</h1>
       <div className={classes.inputSection}>
-        <input type="text" value={inputVal} onChange={handlechange} />
+        <input
+          type="text"
+          value={inputVal}
+          onChange={handlechange}
+          placeholder=" please write a city"
+        />
         <CiSearch />
       </div>
     </div>
