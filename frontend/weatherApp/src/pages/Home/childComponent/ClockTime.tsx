@@ -10,7 +10,7 @@ export default function ClockTime() {
     const seconds = date.getSeconds();
     const ampm = hours >= 12 ? "PM" : "AM";
     const Hours = hours % 12 === 0 ? 12 : hours % 12; // 12-hour format
-    const paddedHours = `0${Hours}`;
+    const paddedHours = Hours < 10 ? `0${Hours}` : Hours;
     const paddedMinutes = minutes < 10 ? `0${minutes}` : minutes;
     const paddedSeconds = seconds < 10 ? `0${seconds}` : seconds;
     return `${paddedHours}:${paddedMinutes}:${paddedSeconds} ${ampm}`;
