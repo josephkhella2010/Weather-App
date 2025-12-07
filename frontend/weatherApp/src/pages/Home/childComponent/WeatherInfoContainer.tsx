@@ -216,9 +216,12 @@ export default function WeatherInfoContainer() {
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
-    //const ampm = hours >= 12 ? "PM" : "AM";
-    const Hours = hours > 12 ? hours - 12 : hours;
-    const paddedHours = Hours < 10 ? `0${Hours}` : Hours;
+    /* 
+    //const ampm = hours >= 12 ? "PM" : "AM";let displayHour = hours === 24 || hours === 0 ? 0 : hours;
+        const Hours = hours > 12 ? hours - 12 : hours;
+    const paddedHours = Hours < 10 ? `0${Hours}` : Hours; */
+    let displayHour = hours === 24 || hours === 0 ? 0 : hours;
+    const paddedHours = displayHour < 10 ? `0${displayHour}` : displayHour;
     const coverSeconds = seconds < 10 ? `0${seconds}` : seconds;
     const covertMinutes = minutes < 10 ? `0${minutes}` : minutes;
     const fullTime = `${paddedHours}: ${covertMinutes}: ${coverSeconds}  `;
