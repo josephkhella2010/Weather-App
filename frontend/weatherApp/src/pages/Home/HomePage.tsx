@@ -17,7 +17,7 @@ import LoadingContainer from "./childComponent/LoadingContainer";
 const useStyles = createUseStyles({
   homePageWrapper: {
     width: "100%",
-    backgroundImage: `url("/Foto/homeBackground.jpg")`,
+    backgroundImage: `url("/Foto/weatherOne.jpg")`,
     backgroundAttachment: "fixed",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
@@ -32,7 +32,7 @@ export default function HomePage() {
     (state: RootState) => state.CityStore
   );
 
-  const storedCity = localStorage.getItem("city") || null;
+  const storedCity = sessionStorage.getItem("cityName") || null;
   const storedCityCorrect = JSON.parse(
     localStorage.getItem("isCity") || "false"
   );
@@ -47,15 +47,18 @@ export default function HomePage() {
         dispatch(setCity(null));
         dispatch(setWeatherInfo(null));
         dispatch(setIsCityCorrect(false));
-        localStorage.removeItem("city");
+        sessionStorage.removeItem("cityName");
         localStorage.setItem("isCity", JSON.stringify(false));
         return null;
+      }
+      if (!cityName) {
+        sessionStorage.removeItem("cityName");
       }
 
       dispatch(setCity(cityName));
       dispatch(setWeatherInfo(data.weather));
       dispatch(setIsCityCorrect(true));
-      localStorage.setItem("city", JSON.stringify(cityName));
+      sessionStorage.setItem("cityName", JSON.stringify(cityName));
       localStorage.setItem("isCity", JSON.stringify(true));
 
       return data.weather;
@@ -72,7 +75,6 @@ export default function HomePage() {
       getWeaterData(cityName);
     }
   }, []);
-  console.log(isLoading);
 
   return (
     <div className={classes.homePageWrapper}>

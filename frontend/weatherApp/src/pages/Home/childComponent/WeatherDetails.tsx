@@ -4,15 +4,15 @@ import WeatherInfoContainer from "./WeatherInfoContainer";
 
 const useStyles = createUseStyles({
   WeatherMainContainer: {
-    overflowX: "hidden", // hide overflow for smooth slide
+    overflowX: "hidden",
     width: "100%",
   },
   WeatherContainer: {
     display: "flex",
-    width: "200%", // double width to hold both sections
+    width: "200%",
   },
   WeatherContainerMainSection: {
-    width: "50%", // each section full viewport width
+    width: "50%",
     flexShrink: 0,
   },
 });
@@ -38,12 +38,12 @@ export default function WeatherDetails({
           transition: "transform 0.5s ease-in-out",
         }}
       >
-        {/* First Section: invalid city */}
+        {/* First Section*/}
         <div className={classes.WeatherContainerMainSection}>
           <SecondContainer />
         </div>
 
-        {/* Second Section: valid city */}
+        {/* Second Section */}
         <div className={classes.WeatherContainerMainSection}>
           <WeatherInfoContainer />
         </div>

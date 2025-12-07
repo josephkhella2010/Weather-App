@@ -7,7 +7,7 @@ const useStyles = createUseStyles({
     flexDirection: "column",
     gap: "50px",
     alignItems: "center",
-    padding: "100px 30px",
+    padding: "130px 30px 100px 30px ",
     "& h1": {
       color: "#ffffff",
     },

@@ -59,9 +59,10 @@ const useStyles = createUseStyles({
     flexDirection: "column",
     gap: "30px",
     backgroundColor: "#ffffffc0",
-    width: "fit-content",
-    padding: "30px",
+    /*     width: "fit-content",
+     */ padding: "30px",
     borderRadius: "15px",
+    width: "100%",
     "@media (max-width: 768px)": {
       width: "100%",
     },
@@ -228,7 +229,6 @@ export default function WeatherInfoContainer() {
 
     return fullTime;
   }
-  console.log(weatherInfo, weatherInfo?.weather[0]?.main);
 
   const weatherConditions = weatherInfo?.weather[0]?.main;
 
@@ -266,7 +266,6 @@ export default function WeatherInfoContainer() {
 
     return iconName;
   }
-  console.log(getIcon());
   return (
     <div className={classes.SecondContainerMainContainer}>
       <div className={classes.SecondContainerSection}>

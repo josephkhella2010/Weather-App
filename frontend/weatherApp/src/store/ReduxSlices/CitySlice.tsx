@@ -6,7 +6,7 @@ interface InitialStateType {
   isLoading: boolean;
 }
 const initialState: InitialStateType = {
-  city: JSON.parse(localStorage.getItem("city") || "null"),
+  city: JSON.parse(sessionStorage.getItem("cityName") || "null"),
   isCityCorrect: JSON.parse(localStorage.getItem("isCity") || "false"),
   weatherInfo: null,
   isLoading: false,
@@ -19,9 +19,9 @@ const CitySlice = createSlice({
     setCity: (state, action: PayloadAction<string | null>) => {
       state.city = action.payload;
       if (action.payload) {
-        localStorage.setItem("city", JSON.stringify(action.payload)); // ✅ wrap in quotes
+        sessionStorage.setItem("cityName", JSON.stringify(action.payload)); // ✅ wrap in quotes
       } else {
-        localStorage.removeItem("city");
+        sessionStorage.removeItem("cityName");
       }
     },
     setIsCityCorrect: (state, action: PayloadAction<boolean>) => {

@@ -56,9 +56,10 @@ const useStyles = createUseStyles({
     flexDirection: "column",
     gap: "30px",
     backgroundColor: "#ffffffc0",
-    width: "fit-content",
     padding: "30px",
     borderRadius: "15px",
+    width: "100%",
+
     "@media (max-width: 768px)": {
       width: "100%",
     },
